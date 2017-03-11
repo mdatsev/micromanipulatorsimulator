@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "project.h"
+#include "World.h"
 
 #define MAX_LOADSTRING 100
 
@@ -10,6 +11,8 @@
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
+
+World world;
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -108,6 +111,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
+   SetTimer(hWnd, 1, 10, NULL);
+   world.AddNode(Node(Vec2(100, 100), 25, 1, 1, Vec2(0, 0.1)));
    return TRUE;
 }
 
@@ -125,6 +130,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
+	case WM_TIMER:
+		{
+			world.Step();
+			RECT rc;
+			GetClientRect(hWnd, &rc);
+			InvalidateRect(hWnd, &rc, FALSE);
+		}
+		break;
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);
@@ -146,7 +159,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: Add any drawing code that uses hdc here...
+			RECT rc;
+			GetClientRect(hWnd, &rc);
+			world.Draw(hdc, rc);
             EndPaint(hWnd, &ps);
         }
         break;
