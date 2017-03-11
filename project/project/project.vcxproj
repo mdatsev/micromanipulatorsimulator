@@ -141,6 +141,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Creature.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="project.h" />
     <ClInclude Include="Resource.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Creature.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="project.cpp" />
     <ClCompile Include="stdafx.cpp">

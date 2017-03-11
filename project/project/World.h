@@ -1,13 +1,13 @@
 #pragma once
-#include <list>
-#include "Node.h"
+#include <vector>
+#include "Creature.h"
 class World
 {
-	std::list<Node> nodes;
+	std::vector<Creature> creatures;
 public:
 	World();
 	~World();
-	void AddNode(Node);
+	void AddCreature(Creature);
 	void Draw(HDC, RECT);
 	void Step();
 };

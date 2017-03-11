@@ -112,7 +112,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    UpdateWindow(hWnd);
 
    SetTimer(hWnd, 1, 10, NULL);
-   world.AddNode(Node(Vec2(100, 100), 25, 1, 1, Vec2(0, 0.1)));
+   world.AddCreature(Node(Vec2(100, 100), 25, 1, 1, Vec2(0, 0.1)));
    return TRUE;
 }
 
