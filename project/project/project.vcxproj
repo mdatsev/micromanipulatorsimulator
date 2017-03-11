@@ -142,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Creature.h" />
+    <ClInclude Include="Ground.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="project.h" />
     <ClInclude Include="Resource.h" />
@@ -152,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Creature.cpp" />
+    <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="project.cpp" />
     <ClCompile Include="stdafx.cpp">
