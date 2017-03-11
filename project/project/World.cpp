@@ -31,6 +31,16 @@ void World::Draw(HDC hdc, RECT rect)
 		{
 			Ellipse(hMemDc, n.pos.x - n.size, n.pos.y - n.size, n.pos.x + n.size, n.pos.y + n.size);
 		}
+
+		for (Muscle& n : c.muscles)
+		{
+			float x1 = c.nodes[n.connectionID1].pos.x;
+			float y1 = c.nodes[n.connectionID1].pos.y;
+			float x2 = c.nodes[n.connectionID2].pos.x;
+			float y2 = c.nodes[n.connectionID2].pos.y;
+			MoveToEx(hMemDc, x1, y1, NULL);
+			LineTo(hMemDc, x2, y2);
+		}
 	}
 
 	BitBlt(hdc, rect.left, rect.top, rect.right, rect.bottom, hMemDc, 0, 0, SRCCOPY);

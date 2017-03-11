@@ -112,7 +112,18 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    UpdateWindow(hWnd);
 
    SetTimer(hWnd, 1, 10, NULL);
-   world.AddCreature(Node(Vec2(100, 100), 25, 1, 1, Vec2(0, 0.1)));
+   Creature c;
+   c.AddNode(Node(Vec2(100, 100), 25, 1, 1, Vec2(-0.005, 0.015)));
+   c.AddNode(Node(Vec2(200, 100), 25, 1, 1, Vec2(0, 0.025)));
+   c.AddNode(Node(Vec2(100, 200), 25, 1, 1, Vec2(0, 0.035)));
+   c.AddNode(Node(Vec2(450, 200), 25, 1, 1, Vec2(0, 0.030)));
+   c.AddNode(Node(Vec2(550, 200), 25, 1, 1, Vec2(0, 0.05)));
+   c.AddMuscle(Muscle(0, 1));
+   c.AddMuscle(Muscle(0, 2));
+   c.AddMuscle(Muscle(1, 2));
+   c.AddMuscle(Muscle(2, 4));
+   c.AddMuscle(Muscle(3, 4));
+   world.AddCreature(c);
    return TRUE;
 }
 

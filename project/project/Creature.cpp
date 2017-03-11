@@ -7,11 +7,6 @@ Creature::Creature()
 {
 }
 
-Creature::Creature(Node n)
-{
-	nodes.push_back(n);
-}
-
 
 Creature::~Creature()
 {
@@ -23,4 +18,14 @@ void Creature::Step()
 	{
 		n.Step();
 	}
+}
+
+void Creature::AddNode(Node n)
+{
+	nodes.push_back(n);
+}
+
+void Creature::AddMuscle(Muscle m)
+{
+	muscles.push_back(m);
 }
