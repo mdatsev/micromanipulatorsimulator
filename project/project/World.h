@@ -8,7 +8,7 @@ public:
 	World();
 	~World();
 	void AddCreature(Creature);
-	void Draw(HDC, RECT);
+	void Draw(HDC, RECT, bool = false);
 	void Step();
 };
 
