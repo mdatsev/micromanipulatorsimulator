@@ -19,6 +19,6 @@ public:
 	void Step();
 	int AddForce(Vec2 force);
 	void ChangeForce(int id, Vec2 force);
-	void CollisionDetector(Ground ground);
+	void CollisionDetector();
 };
 
