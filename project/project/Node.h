@@ -15,6 +15,6 @@ public:
 	~Node();
 	void Step();
 	void AddForce(Vec2 force);
-	void CollisionDetector(Ground ground);
+	void CollisionDetector();
 };
 
