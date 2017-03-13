@@ -59,7 +59,7 @@ void Node::CollisionDetector()
 	}
 }
 
-static bool linePointCollision(Vec2 point, Vec2 point2, Vec2 closestPoint, float len)
+bool Node::linePointCollision(Vec2 point, Vec2 point2, Vec2 closestPoint, float len)
 {
 	float dist1 = Vec2::Distance(point, closestPoint);
 	float dist2 = Vec2::Distance(point2, closestPoint);
