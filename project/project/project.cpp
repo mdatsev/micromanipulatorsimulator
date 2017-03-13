@@ -112,15 +112,16 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    UpdateWindow(hWnd);
 
    Creature c;
-   c.AddNode(Node(Vec2(250, 150), 10, 1, 1, 50, true));
-   c.AddNode(Node(Vec2(550, 50), 10, 1, 1, 60, true));
-   c.AddNode(Node(Vec2(650, 400), 10, 1, 1, 50, true));
-   c.AddNode(Node(Vec2(200, 150), 10, 1, 1, 1000000, false));
-   c.AddMuscle(Muscle(0, 1, 0.1, 50));
-   c.AddMuscle(Muscle(1, 2, 0.1, 50));
-   c.AddMuscle(Muscle(0, 2, 0.1, 50));
-   c.AddMuscle(Muscle(0, 3, 0.1, 50));
+   c.AddNode(Node(Vec2(250, 150), 10, 1, 1, 25, true));
    world.AddCreature(c);
+
+   Ground* g = new Ground(10, 10);
+   g->AddPoint(Vec2(0, 300));
+   g->AddPoint(Vec2(300, 300));
+   g->AddPoint(Vec2(600, 300));
+   g->AddPoint(Vec2(900, 400));
+
+   World::ground = g;
 
    SetTimer(hWnd, 1, 1000/60, NULL);
    return TRUE;

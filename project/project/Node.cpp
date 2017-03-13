@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Node.h"
+#include "World.h"
 
 Node::Node(Vec2 pos, float size, float friction, float restitution, float mass, bool gravity) : pos(pos), size(size), friction(friction), restitution(restitution), mass(mass)
 {
@@ -24,6 +25,7 @@ void Node::Step()
 	pos += vel;
 	vel += acc;
 	vel *= airFriction;
+	CollisionDetector();
 }
 
 int Node::AddForce(Vec2 force)
@@ -39,8 +41,8 @@ void Node::ChangeForce(int id, Vec2 force)
 
 void Node::CollisionDetector()
 {
-	Ground* ground;
-	for (int i = 0; i < ground->points.size() - 1; i++)
+	Ground* ground = World::ground;
+	for (int i = 0; i < World::ground->points.size() - 1; i++)
 	{
 		float len = Vec2::Distance(ground->points[i], ground->points[i + 1]);
 		float dot = (((pos.x - ground->points[i].x)*(ground->points[i + 1].x - ground->points[i].x)) + ((pos.y - ground->points[i].y)*(ground->points[i + 1].y - ground->points[i].y))) / pow(len, 2);

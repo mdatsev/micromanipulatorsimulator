@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "World.h"
 
+Ground* World::ground = new Ground(10, 10);
 
 World::World()
 {
@@ -26,6 +27,12 @@ void World::Draw(HDC hdc, RECT rect, bool debug)
 
 	for(Creature& c : creatures)
 	{
+		MoveToEx(hMemDc, World::ground->points[0].x, World::ground->points[0].y, NULL); //fixme drawing the same point twice
+		for (Vec2& point : World::ground->points)
+		{
+			LineTo(hMemDc, point.x, point.y);
+		}
+
 		for (Node& n : c.nodes)
 		{
 			int mass = n.mass;
