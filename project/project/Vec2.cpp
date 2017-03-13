@@ -42,6 +42,11 @@ void Vec2::operator+=(const Vec2 &v) {
 	y += v.y;
 }
 
+void Vec2::operator*=(const float &right) {
+	x *= right;
+	y *= right;
+}
+
 Vec2 Vec2::operator+(const Vec2 &right) {
 	Vec2 result;
 	result.x = x + right.x;
