@@ -42,6 +42,7 @@ void Node::ChangeForce(int id, Vec2 force)
 void Node::CollisionDetector()
 {
 	Ground* ground = World::ground;
+	int id = -1;
 	for (int i = 0; i < World::ground->points.size() - 1; i++)
 	{
 		float len = Vec2::Distance(ground->points[i], ground->points[i + 1]);
@@ -56,7 +57,12 @@ void Node::CollisionDetector()
 		float closestDist = Vec2::Distance(closestPoint, pos);
 		if (closestDist <= size)
 		{
-			//Here goes stuff after they collide
+			Vec2 direction = closestPoint - pos;
+			id = Node::AddForce(Vec2::Normalize(direction) * mass * 0.1);
+		}
+		else if (id != -1)
+		{
+			Node::ChangeForce(id, Vec2(0, 0));
 		}
 	}
 }
