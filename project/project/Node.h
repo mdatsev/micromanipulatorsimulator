@@ -2,8 +2,10 @@
 #include "Vec2.h"
 #include "Ground.h"
 #include <vector>
+#include <map>
 class Node
 {
+	std::map<int, int> normal_forces;
 public:
 	float size;
 	float friction;
@@ -18,6 +20,7 @@ public:
 	~Node();
 	void Step();
 	int AddForce(Vec2 force);
+	int AddForce();
 	void ChangeForce(int id, Vec2 force);
 	void CollisionDetector();
 	static bool linePointCollision(Vec2 point, Vec2 point2, Vec2 closestPoint, float len);

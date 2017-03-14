@@ -31,7 +31,13 @@ void Node::Step()
 int Node::AddForce(Vec2 force)
 {
 	forces.push_back(force);
-	return forces.size() - 1;;
+	return forces.size() - 1;
+}
+
+int Node::AddForce()
+{
+	forces.push_back(Vec2(0,0));
+	return forces.size() - 1;
 }
 
 void Node::ChangeForce(int id, Vec2 force)
@@ -42,9 +48,12 @@ void Node::ChangeForce(int id, Vec2 force)
 void Node::CollisionDetector()
 {
 	Ground* ground = World::ground;
-	int id = -1;
 	for (int i = 0; i < World::ground->points.size() - 1; i++)
 	{
+		if (normal_forces.empty())
+		{
+			normal_forces[i] = Node::AddForce();
+		}
 		float len = Vec2::Distance(ground->points[i], ground->points[i + 1]);
 		float dot = (((pos.x - ground->points[i].x)*(ground->points[i + 1].x - ground->points[i].x)) + ((pos.y - ground->points[i].y)*(ground->points[i + 1].y - ground->points[i].y))) / pow(len, 2);
 		float closestX = ground->points[i].x + (dot * (ground->points[i + 1].x - ground->points[i].x));
@@ -57,12 +66,13 @@ void Node::CollisionDetector()
 		float closestDist = Vec2::Distance(closestPoint, pos);
 		if (closestDist <= size)
 		{
-			Vec2 direction = closestPoint - pos;
-			id = Node::AddForce(Vec2::Normalize(direction) * mass * 0.1);
+			vel = Vec2(0, 0);
+			Vec2 direction = pos - closestPoint;
+			Node::ChangeForce(normal_forces[i] ,Vec2::Normalize(direction) * mass * 0.1);
 		}
-		else if (id != -1)
+		else
 		{
-			Node::ChangeForce(id, Vec2(0, 0));
+			Node::ChangeForce(normal_forces[i], Vec2(0,0));
 		}
 	}
 }
