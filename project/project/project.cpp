@@ -112,7 +112,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    UpdateWindow(hWnd);
 
    Creature c;
-   c.AddNode(Node(Vec2(150, 100), 50, 1, 1, 25, true));
+   c.AddNode(Node(Vec2(500, 100), 50, 1, 1, 25, true));
    world.AddCreature(c);
 
    Ground* g = new Ground(10, 10);

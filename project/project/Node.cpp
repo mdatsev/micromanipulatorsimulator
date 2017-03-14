@@ -50,7 +50,7 @@ void Node::CollisionDetector()
 	Ground* ground = World::ground;
 	for (int i = 0; i < World::ground->points.size() - 1; i++)
 	{
-		if (normal_forces.empty())
+		if (normal_forces.size() <= i)
 		{
 			normal_forces[i] = Node::AddForce();
 		}
@@ -61,7 +61,7 @@ void Node::CollisionDetector()
 		Vec2 closestPoint = Vec2(closestX, closestY);
 		if (!linePointCollision(ground->points[i], ground->points[i + 1], closestPoint, len))
 		{
-			return;
+			continue;
 		}
 		float closestDist = Vec2::Distance(closestPoint, pos);
 		if (closestDist <= size)
