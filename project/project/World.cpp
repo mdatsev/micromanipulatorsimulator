@@ -65,13 +65,22 @@ void World::Draw(HDC hdc, RECT rect, bool debug)
 				HPEN bluePen = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
 
 				HPEN hOldPen = (HPEN)SelectObject(hMemDc, greenPen);
-
+				//draw velocity			
 				MoveToEx(hMemDc, n.pos.x, n.pos.y, NULL);
 				LineTo(hMemDc, n.pos.x + n.vel.x * 60, n.pos.y + n.vel.y * 60);
 
+				//draw acceleration
 				SelectObject(hMemDc, redPen);
 				MoveToEx(hMemDc, n.pos.x, n.pos.y, NULL);
 				LineTo(hMemDc, n.pos.x + n.acc.x * 3600, n.pos.y + n.acc.y * 3600);
+
+				//draw forces
+				SelectObject(hMemDc, bluePen);
+				for (Vec2& force : n.forces)
+				{
+					MoveToEx(hMemDc, n.pos.x, n.pos.y, NULL);
+					LineTo(hMemDc, n.pos.x + force.x * 30, n.pos.y + force.y * 30);
+				}
 
 				SelectObject(hMemDc, hOldPen);
 				DeleteObject(greenPen);

@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="Creature.h" />
     <ClInclude Include="Ground.h" />
+    <ClInclude Include="globals.h" />
     <ClInclude Include="Muscle.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="project.h" />
