@@ -5,6 +5,7 @@
 #include <map>
 class Node
 {
+	float oldTime = 0;
 	std::map<int, int> normal_forces;
 public:
 	float size;

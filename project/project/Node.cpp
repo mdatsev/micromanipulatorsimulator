@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Node.h"
 #include "World.h"
+#include <ctime>
 
 Node::Node(Vec2 pos, float size, float friction, float restitution, float mass, bool gravity) : pos(pos), size(size), friction(friction), restitution(restitution), mass(mass)
 {
@@ -16,12 +17,12 @@ Node::~Node()
 
 void Node::Step()
 {
+	float oldTime = clock();
 	acc = Vec2(0, 0);
 	for(Vec2& f : forces)
 	{
 		acc += f / mass;
 	}
-	acc = acc;
 	pos += vel;
 	vel += acc;
 	vel *= airFriction;
@@ -66,9 +67,9 @@ void Node::CollisionDetector()
 		float closestDist = Vec2::Distance(closestPoint, pos);
 		if (closestDist <= size)
 		{
-			vel = Vec2(0, 0);
-			Vec2 direction = pos - closestPoint;
-			Node::ChangeForce(normal_forces[i] ,Vec2::Normalize(direction) * mass * 0.1);
+			Vec2 direction = Vec2::Normalize(pos - closestPoint);
+			vel = vel - direction * (Vec2::Dot(vel, direction)) * 2 * restitution; // mirror vector http://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
+			Node::ChangeForce(normal_forces[i] , direction * mass * 0.1);
 		}
 		else
 		{
