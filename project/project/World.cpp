@@ -80,13 +80,11 @@ void World::Draw(HDC hdc, RECT rect, bool debug)
 				int i = 0;
 				SetTextColor(hMemDc, RGB(0, 0, 255));
 				SetBkMode(hMemDc, TRANSPARENT);
-				for (Vec2& force : n.forces)
-				{
+
 					MoveToEx(hMemDc, n.pos.x, n.pos.y, NULL);
-					LineTo(hMemDc, n.pos.x + force.x * 30, n.pos.y + force.y * 30);
+					LineTo(hMemDc, n.pos.x + n.forces.x * 30, n.pos.y + n.forces.y * 30);
 					_stprintf_s(buffer, _T("%d"), i++);
-					TextOut(hMemDc, n.pos.x + force.x * 30, n.pos.y + force.y * 30, buffer, _tcslen(buffer));
-				}
+					TextOut(hMemDc, n.pos.x + n.forces.x * 30, n.pos.y + n.forces.y * 30, buffer, _tcslen(buffer));
 
 
 				SelectObject(hMemDc, hOldPen);

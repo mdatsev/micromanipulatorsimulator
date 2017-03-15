@@ -8,7 +8,7 @@ public:
 	int node2_ID;
 	int node1_ForceID;
 	int node2_ForceID;
-	Muscle(int connectionID1, int connectionID2, float force, float target_length);
+	Muscle(int connectionID1, int connectionID2, float stiffness, float target_length);
 	~Muscle();
 };
 
