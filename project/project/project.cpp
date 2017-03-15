@@ -122,7 +122,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    world.AddCreature(c);
    Ground* g = new Ground(10, 10);
-  
+
 
    World::ground = g;
 
