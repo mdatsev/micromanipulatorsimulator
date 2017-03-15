@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "project.h"
 #include "World.h"
+#include <time.h>  
 
 #define MAX_LOADSTRING 100
 
@@ -11,6 +12,8 @@
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
+int deltaTime;
+int oldTime;
 
 World world;
 
@@ -115,24 +118,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    int offy = 0;
 
    Creature c;
-
-   c.AddNode(Node(Vec2(500, 0), 25, 1, 0.75, 25, true));
-
-   world.AddCreature(c);
-
    Ground* g = new Ground(10, 10);
-   g->AddPoint(Vec2(0 + offx, 100 + offy));
-   g->AddPoint(Vec2(300 + offx, 400 + offy));
-   g->AddPoint(Vec2(300 + offx, 350 + offy));
-   g->AddPoint(Vec2(250 + offx, 200 + offy));
-   g->AddPoint(Vec2(600 + offx, 100 + offy));
-   g->AddPoint(Vec2(600 + offx, 300 + offy));
-   g->AddPoint(Vec2(900 + offx, 400 + offy));
-   g->AddPoint(Vec2(1000 + offx, 400 + offy));
-
+   g->AddPoint(Vec2(0,0));
+   world.AddCreature(c);
    World::ground = g;
 
-   SetTimer(hWnd, 1, 1000/30, NULL);
+   SetTimer(hWnd, 1, 1000/60, NULL);
 
    return TRUE;
 }
@@ -153,7 +144,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
 	case WM_TIMER:
 		{
-			world.Step();
+			deltaTime = clock() - oldTime;
+			oldTime = clock();
+			world.Step(deltaTime);
 			RECT rc;
 			GetClientRect(hWnd, &rc);
 			InvalidateRect(hWnd, &rc, FALSE);

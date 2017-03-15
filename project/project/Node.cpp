@@ -1,19 +1,16 @@
 #include "stdafx.h"
 #include "Node.h"
 #include "World.h"
+#include "globals.h"
 #include <ctime>
 
-Node::Node(Vec2 pos, float size, float friction, float restitution, float mass, bool gravity) : pos(pos), size(size), friction(friction), restitution(restitution), mass(mass), gravity(gravity)
+Node::Node(Vec2 pos, float size, float friction, float restitution, float mass, bool gravity) : 
+	pos(pos), size(size), friction(friction), restitution(restitution), mass(mass), gravityForce(gravity ? Vec2(0, gravity_constant) : Vec2(0,0))
 {
 }
 
 Node::~Node()
 {
-}
-
-void Node::Step()
-{
-
 }
 
 void Node::CollisionDetector()
@@ -31,15 +28,11 @@ void Node::CollisionDetector()
 			continue;
 		}
 		float closestDist = Vec2::Distance(closestPoint, pos);
-
-		char  buffer[200];
-		sprintf(buffer, "   Dis:    %d\n", i);
-		OutputDebugStringA(buffer);
 		if (closestDist <= size)
 		{
 			Vec2 direction = Vec2::Normalize(pos - closestPoint);
 			vel = vel - direction * (Vec2::Dot(vel, direction)) * 2 * restitution; // mirror vector http://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
-			forces += direction * mass * 0.1;
+			forces += direction * mass * gravity_constant;
 		}
 	}
 } 

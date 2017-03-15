@@ -11,6 +11,6 @@ public:
 	~World();
 	void AddCreature(Creature);
 	void Draw(HDC, RECT, bool = false);
-	void Step();
+	void Step(float dt);
 };
 
