@@ -111,9 +111,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
+   int offx = 0;
+   int offy = 0;
+
    Creature c;
 
-   c.AddNode(Node(Vec2(500, 100), 150, 1, 0.75, 25, true));
+   c.AddNode(Node(Vec2(500, 0), 25, 1, 0.75, 25, true));
 
    world.AddCreature(c);
 
