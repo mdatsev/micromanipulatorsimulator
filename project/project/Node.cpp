@@ -13,6 +13,16 @@ Node::~Node()
 {
 }
 
+void Node::CollideFlat(float height)
+{
+	if (pos.y > height - size)
+	{
+		pos.y = height - size;
+		vel = vel - Vec2(0, -1) * (Vec2::Dot(vel, Vec2(0, -1))) * 2 * restitution; // reflection vector http://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
+		forces += Vec2(0, -1) * mass * gravity_constant;
+	}
+}
+
 void Node::CollisionDetector()
 {
 	Ground* ground = World::ground;
@@ -42,7 +52,6 @@ void Node::CollisionDetector()
 			forces += direction * mass * 0.1;
 			continue;
 		}
-
 
 		float len = Vec2::Distance(ground->points[i], ground->points[i + 1]);
 		float dot = (((pos.x - ground->points[i].x)*(ground->points[i + 1].x - ground->points[i].x)) + ((pos.y - ground->points[i].y)*(ground->points[i + 1].y - ground->points[i].y))) / pow(len, 2);

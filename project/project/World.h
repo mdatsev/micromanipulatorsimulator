@@ -8,6 +8,7 @@ class World
 public:
 	bool simulation_running;
 	static Ground* ground;
+	float flat_ground_y;
 	World();
 	~World();
 	void StartSimulation();

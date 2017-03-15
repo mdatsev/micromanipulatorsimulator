@@ -32,6 +32,7 @@ void Creature::Step(float dt)
 	for (Node& n : nodes)
 	{
 		n.CollisionDetector();
+		//n.CollideFlat(500);
 		n.acc = n.forces / n.mass;
 		n.vel += n.acc * dt;
 		//n.vel *= n.airFriction;

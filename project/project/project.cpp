@@ -120,14 +120,23 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    Creature c;
    Ground* g = new Ground(10, 10);
    
-   c.AddNode(Node(Vec2(100 + offx, 200 + offy), 25, 1, 0.75, 1, true));
+   c.AddNode(Node(Vec2(400 + offx, 75 + offy), 25, 1, 0.75, 1, true));
+   c.AddNode(Node(Vec2(596 + offx, 75 + offy), 25, 1, 0.75, 1, true));
 
-   g->AddPoint(Vec2(0 + offx, 400 + offy));
+   c.AddMuscle(Muscle(0, 1, 0.002, 100));
+
+   g->AddPoint(Vec2(0 + offx, 100 + offy));
+   g->AddPoint(Vec2(300 + offx, 400 + offy));
+   g->AddPoint(Vec2(300 + offx, 350 + offy));
+   g->AddPoint(Vec2(250 + offx, 200 + offy));
+   g->AddPoint(Vec2(600 + offx, 100 + offy));
+   g->AddPoint(Vec2(750 + offx, 300 + offy));
+   g->AddPoint(Vec2(900 + offx, 400 + offy));
    g->AddPoint(Vec2(1000 + offx, 400 + offy));
 
    world.AddCreature(c);
    World::ground = g;
-   world.StartSimulation();
+   //world.StartSimulation();
    SetTimer(hWnd, 1, 1000/60, NULL);
 
    return TRUE;
@@ -178,6 +187,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             HDC hdc = BeginPaint(hWnd, &ps);
 			RECT rc;
 			GetClientRect(hWnd, &rc);
+			float precision = 1;
+			for (int i = 0; i < precision; i++)
+			{
+				world.Integrate(1/precision);
+			}
 			world.Draw(hdc, rc, true);
             EndPaint(hWnd, &ps);
         }

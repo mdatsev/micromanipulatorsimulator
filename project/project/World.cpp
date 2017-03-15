@@ -19,8 +19,7 @@ void Simulate(void* param)
 	world->simulation_running = true;
 	while (world->simulation_running)
 	{
-		world->Integrate(0.05);
-		Sleep(1);
+		world->Integrate(0.00001);
 	}
 }
 

@@ -20,6 +20,7 @@ public:
 	Vec2 forces;
 	Node(Vec2 pos, float size, float friction, float restitution, float mass = 1, bool gravity = true);
 	~Node();
+	void CollideFlat(float height);
 	void CollisionDetector();
 	static bool linePointCollision(Vec2 point, Vec2 point2, Vec2 closestPoint, float len);
 	static bool pointCircleCollision(Vec2 point, Vec2 circle, float size);
