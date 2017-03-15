@@ -12,11 +12,11 @@ Creature::~Creature()
 {
 }
 
-void Creature::Step()
+void Creature::Step(float dt)
 {
 	for (Node& n : nodes)
 	{
-		n.forces = Vec2(0, n.gravity ? n.mass * 0.1 : 0);
+		n.forces = n.gravityForce;
 	}
 
 	for (Muscle& m : muscles)
@@ -33,9 +33,9 @@ void Creature::Step()
 	{
 		n.CollisionDetector();
 		n.acc = n.forces / n.mass;
-		n.vel += n.acc;
-		n.vel *= n.airFriction;
-		n.pos += n.vel;
+		n.vel += n.acc * dt;
+		//n.vel *= n.airFriction;
+		n.pos += n.vel * dt;
 	}
 }
 

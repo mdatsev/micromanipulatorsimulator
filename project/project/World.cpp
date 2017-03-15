@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "World.h"
+#include <process.h>
 
 Ground* World::ground = new Ground(10, 10);
 
@@ -10,6 +11,27 @@ World::World()
 
 World::~World()
 {
+}
+
+void Simulate(void* param)
+{
+	World* world = (World*)param;
+	world->simulation_running = true;
+	while (world->simulation_running)
+	{
+		world->Integrate(0.05);
+		Sleep(1);
+	}
+}
+
+void World::StartSimulation()
+{
+	_beginthread(Simulate, 0, this);
+}
+
+void World::StopSimulation()
+{
+	simulation_running = false;
 }
 
 void World::AddCreature(Creature n)
@@ -82,9 +104,9 @@ void World::Draw(HDC hdc, RECT rect, bool debug)
 				SetBkMode(hMemDc, TRANSPARENT);
 
 					MoveToEx(hMemDc, n.pos.x, n.pos.y, NULL);
-					LineTo(hMemDc, n.pos.x + n.forces.x * 30, n.pos.y + n.forces.y * 30);
+					LineTo(hMemDc, n.pos.x + n.forces.x * 60, n.pos.y + n.forces.y * 60);
 					_stprintf_s(buffer, _T("%d"), i++);
-					TextOut(hMemDc, n.pos.x + n.forces.x * 30, n.pos.y + n.forces.y * 30, buffer, _tcslen(buffer));
+					TextOut(hMemDc, n.pos.x + n.forces.x * 60, n.pos.y + n.forces.y * 60, buffer, _tcslen(buffer));
 
 
 				SelectObject(hMemDc, hOldPen);
@@ -102,10 +124,10 @@ void World::Draw(HDC hdc, RECT rect, bool debug)
 	DeleteDC(hMemDc);
 }
 
-void World::Step()
+void World::Integrate(float dt)
 {
 	for(Creature& c : creatures)
 	{
-		c.Step();
+		c.Step(dt);
 	}
 }

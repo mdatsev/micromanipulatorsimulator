@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "project.h"
 #include "World.h"
+#include <time.h>
 
 #define MAX_LOADSTRING 100
 
@@ -11,6 +12,8 @@
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
+int deltaTime;
+int oldTime;
 
 World world;
 
@@ -115,18 +118,17 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    int offy = 0;
 
    Creature c;
+   Ground* g = new Ground(10, 10);
+   
+   c.AddNode(Node(Vec2(100 + offx, 200 + offy), 25, 1, 0.75, 1, true));
 
-   c.AddNode(Node(Vec2(400 + offx, 0 + offy), 25, 1, 0.75, 1, true));
-   c.AddNode(Node(Vec2(600 + offx, 0 + offy), 25, 1, 0.75, 1, true));
-
+   g->AddPoint(Vec2(0 + offx, 400 + offy));
+   g->AddPoint(Vec2(1000 + offx, 400 + offy));
 
    world.AddCreature(c);
-   Ground* g = new Ground(10, 10);
-
-
    World::ground = g;
-
-   SetTimer(hWnd, 1, 1000/30, NULL);
+   world.StartSimulation();
+   SetTimer(hWnd, 1, 1000/60, NULL);
 
    return TRUE;
 }
@@ -147,7 +149,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
 	case WM_TIMER:
 		{
-			world.Step();
 			RECT rc;
 			GetClientRect(hWnd, &rc);
 			InvalidateRect(hWnd, &rc, FALSE);
@@ -163,6 +164,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
             case IDM_EXIT:
+				world.StopSimulation();
                 DestroyWindow(hWnd);
                 break;
             default:
