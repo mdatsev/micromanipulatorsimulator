@@ -33,8 +33,8 @@ void Node::CollisionDetector()
 			continue;
 		}
 
-		bool inside1 = pointCircleCollision(ground->points[i], pos, size);
-		bool inside2 = pointCircleCollision(ground->points[i + 1], pos, size);
+		bool inside1 = pointCircleCollision(p1, pos, size);
+		bool inside2 = pointCircleCollision(p2, pos, size);
 		if (inside1 || inside2)
 		{
 			Vec2 direction = Vec2::Normalize(pos - ground->points[i]);
@@ -44,17 +44,20 @@ void Node::CollisionDetector()
 		}
 
 
-		float len = Vec2::Distance(ground->points[i], ground->points[i + 1]);
-		float dot = (((pos.x - ground->points[i].x)*(ground->points[i + 1].x - ground->points[i].x)) + ((pos.y - ground->points[i].y)*(ground->points[i + 1].y - ground->points[i].y))) / pow(len, 2);
-		float closestX = ground->points[i].x + (dot * (ground->points[i + 1].x - ground->points[i].x));
-		float closestY = ground->points[i].y + (dot * (ground->points[i + 1].y - ground->points[i].y));
+		float len = (p2.x - p1.x) * (p2.x - p1.x) + 
+			(p2.y - p1.y) * (p2.y - p1.y);
+		float dot = (((pos.x - p1.x)*(p2.x - p1.x)) + ((pos.y - p1.y)*(p2.y - p1.y))) / len;
+		float closestX = p1.x + (dot * (p2.x - p1.x));
+		float closestY = p1.y + (dot * (p2.y - p1.y));
 		Vec2 closestPoint = Vec2(closestX, closestY);
-		if (!linePointCollision(ground->points[i], ground->points[i + 1], closestPoint, len))
+		if (!linePointCollision(p1, p2, closestPoint, len))
 		{
 			continue;
 		}
-		float closestDist = Vec2::Distance(closestPoint, pos);
-		if (closestDist <= size)
+		float closestDist = (pos.x - closestPoint.x) *
+			(pos.x - closestPoint.x) + (pos.y - closestPoint.y) * 
+			(pos.y - closestPoint.y);
+		if (closestDist <= size * size)
 		{
 			Vec2 direction = Vec2::Normalize(pos - closestPoint);
 			vel = vel - direction * (Vec2::Dot(vel, direction)) * 2 * restitution; // reflection vector http://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
@@ -68,9 +71,9 @@ bool Node::linePointCollision(Vec2 point, Vec2 point2, Vec2 closestPoint, float 
 	float dist1 = Vec2::Distance(point, closestPoint);
 	float dist2 = Vec2::Distance(point2, closestPoint);
 
-	float epsilon = 0.1f;
 
-	if (dist1 + dist2 >= len - epsilon && dist1 + dist2 <= len + epsilon) {
+	if (dist1 * dist1 + dist2 * dist2 >= len - 2 * dist2 * dist1 && 
+		dist1 * dist1 + dist2 * dist2 <= len - 2 * dist2 * dist1) {
 		return true;
 	}
 	return false;
@@ -79,8 +82,7 @@ bool Node::linePointCollision(Vec2 point, Vec2 point2, Vec2 closestPoint, float 
 bool Node::pointCircleCollision(Vec2 point, Vec2 circle, float size)
 {
 	float distance = Vec2::Distance(point, circle);
-	if (distance <= size
-	) {
+	if (distance <= size) {
 		return true;
 	}
 	return false;
