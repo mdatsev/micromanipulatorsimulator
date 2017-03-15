@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "project.h"
 #include "World.h"
-#include <time.h>  
+#include <time.h>
 
 #define MAX_LOADSTRING 100
 
@@ -119,10 +119,15 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    Creature c;
    Ground* g = new Ground(10, 10);
-   g->AddPoint(Vec2(0,0));
+   
+   c.AddNode(Node(Vec2(100 + offx, 200 + offy), 25, 1, 0.75, 1, true));
+
+   g->AddPoint(Vec2(0 + offx, 400 + offy));
+   g->AddPoint(Vec2(1000 + offx, 400 + offy));
+
    world.AddCreature(c);
    World::ground = g;
-
+   world.StartSimulation();
    SetTimer(hWnd, 1, 1000/60, NULL);
 
    return TRUE;
@@ -144,9 +149,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
 	case WM_TIMER:
 		{
-			deltaTime = clock() - oldTime;
-			oldTime = clock();
-			world.Step(deltaTime);
 			RECT rc;
 			GetClientRect(hWnd, &rc);
 			InvalidateRect(hWnd, &rc, FALSE);
@@ -162,6 +164,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
             case IDM_EXIT:
+				world.StopSimulation();
                 DestroyWindow(hWnd);
                 break;
             default:

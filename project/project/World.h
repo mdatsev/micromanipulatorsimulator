@@ -6,11 +6,13 @@ class World
 {
 	std::vector<Creature> creatures;
 public:
+	bool simulation_running;
 	static Ground* ground;
 	World();
 	~World();
+	void StartSimulation();
+	void StopSimulation();
 	void AddCreature(Creature);
 	void Draw(HDC, RECT, bool = false);
-	void Step(float dt);
+	void Integrate(float dt);
 };
-

@@ -1,3 +1,3 @@
 #pragma once
 
-extern float gravity_constant = 0.0001;
+extern float gravity_constant = 0.1;

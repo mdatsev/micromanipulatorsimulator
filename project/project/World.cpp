@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "World.h"
+#include <process.h>
 
 Ground* World::ground = new Ground(10, 10);
 
@@ -10,6 +11,27 @@ World::World()
 
 World::~World()
 {
+}
+
+void Simulate(void* param)
+{
+	World* world = (World*)param;
+	world->simulation_running = true;
+	while (world->simulation_running)
+	{
+		world->Integrate(0.05);
+		Sleep(1);
+	}
+}
+
+void World::StartSimulation()
+{
+	_beginthread(Simulate, 0, this);
+}
+
+void World::StopSimulation()
+{
+	simulation_running = false;
 }
 
 void World::AddCreature(Creature n)
@@ -102,7 +124,7 @@ void World::Draw(HDC hdc, RECT rect, bool debug)
 	DeleteDC(hMemDc);
 }
 
-void World::Step(float dt)
+void World::Integrate(float dt)
 {
 	for(Creature& c : creatures)
 	{

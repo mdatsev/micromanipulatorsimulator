@@ -18,12 +18,27 @@ void Node::CollisionDetector()
 	Ground* ground = World::ground;
 	for (int i = 0; i < World::ground->points.size() - 1; i++)
 	{
+		Vec2 p1 = World::ground->points[i];
+		Vec2 p2 = World::ground->points[i + 1];
+		float left = p1.x < p2.x ? p1.x : p2.x;
+		float right = p1.x > p2.x ? p1.x : p2.x;
+		float top = p1.y < p2.y ? p1.y : p2.y;
+		float bottom = p1.y > p2.y ? p1.y : p2.y;
+
+		if (left > pos.x + size
+			|| right < pos.x - size
+			|| top > pos.y + size
+			|| bottom < pos.y - size)
+		{
+			continue;
+		}
+
 		bool inside1 = pointCircleCollision(ground->points[i], pos, size);
 		bool inside2 = pointCircleCollision(ground->points[i + 1], pos, size);
 		if (inside1 || inside2)
 		{
 			Vec2 direction = Vec2::Normalize(pos - ground->points[i]);
-			vel = vel - direction * (Vec2::Dot(vel, direction)) * 2 * restitution; // mirror vector http://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
+			vel = vel - direction * (Vec2::Dot(vel, direction)) * 2 * restitution; // reflection vector http://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
 			forces += direction * mass * 0.1;
 			continue;
 		}
@@ -42,7 +57,7 @@ void Node::CollisionDetector()
 		if (closestDist <= size)
 		{
 			Vec2 direction = Vec2::Normalize(pos - closestPoint);
-			vel = vel - direction * (Vec2::Dot(vel, direction)) * 2 * restitution; // mirror vector http://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
+			vel = vel - direction * (Vec2::Dot(vel, direction)) * 2 * restitution; // reflection vector http://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
 			forces += direction * mass * gravity_constant;
 		}
 	}
