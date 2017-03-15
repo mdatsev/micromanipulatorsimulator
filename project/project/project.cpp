@@ -116,19 +116,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    Creature c;
 
-   c.AddNode(Node(Vec2(500, 0), 25, 1, 0.75, 25, true));
+   c.AddNode(Node(Vec2(400 + offx, 0 + offy), 25, 1, 0.75, 1, true));
+   c.AddNode(Node(Vec2(600 + offx, 0 + offy), 25, 1, 0.75, 1, true));
+
 
    world.AddCreature(c);
-
    Ground* g = new Ground(10, 10);
-   g->AddPoint(Vec2(0 + offx, 100 + offy));
-   g->AddPoint(Vec2(300 + offx, 400 + offy));
-   g->AddPoint(Vec2(300 + offx, 350 + offy));
-   g->AddPoint(Vec2(250 + offx, 200 + offy));
-   g->AddPoint(Vec2(600 + offx, 100 + offy));
-   g->AddPoint(Vec2(600 + offx, 300 + offy));
-   g->AddPoint(Vec2(900 + offx, 400 + offy));
-   g->AddPoint(Vec2(1000 + offx, 400 + offy));
+  
 
    World::ground = g;
 
