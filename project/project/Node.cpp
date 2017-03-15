@@ -35,9 +35,16 @@ void Node::CollisionDetector()
 
 		bool inside1 = pointCircleCollision(p1, pos, size);
 		bool inside2 = pointCircleCollision(p2, pos, size);
-		if (inside1 || inside2)
+		if (inside1)
 		{
-			Vec2 direction = Vec2::Normalize(pos - ground->points[i]);
+			Vec2 direction = Vec2::Normalize(pos - p1);
+			vel = vel - direction * (Vec2::Dot(vel, direction)) * 2 * restitution; // reflection vector http://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
+			forces += direction * mass * 0.1;
+			continue;
+		}
+		else if (inside2)
+		{
+			Vec2 direction = Vec2::Normalize(pos - p2);
 			vel = vel - direction * (Vec2::Dot(vel, direction)) * 2 * restitution; // reflection vector http://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
 			forces += direction * mass * 0.1;
 			continue;
