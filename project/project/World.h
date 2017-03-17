@@ -7,7 +7,7 @@ class World
 	std::vector<Creature> creatures;
 public:
 	bool simulation_running;
-	static Ground* ground;
+	Ground* ground;
 	float flat_ground_y;
 	World();
 	~World();

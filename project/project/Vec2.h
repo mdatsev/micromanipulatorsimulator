@@ -10,6 +10,7 @@ public:
 	float Magnitude();
 	static Vec2 Normalize(Vec2);
 	static float Distance(Vec2, Vec2);
+	static float DistanceSq(Vec2 v1, Vec2 v2);
 	static float Dot(Vec2, Vec2);
 	inline void operator+=(const Vec2 & v);
 	inline void operator*=(const float & right);

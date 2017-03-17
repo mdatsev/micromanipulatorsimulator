@@ -13,18 +13,18 @@ Node::~Node()
 {
 }
 
-void Node::CollisionDetector()
+bool Node::CollidesWithGround(Ground* ground, Vec2* collision_point_ptr)
 {
-	Ground* ground = World::ground;
-	for (int i = 0; i < World::ground->points.size() - 1; i++)
+	for (int i = 0; i < ground->points.size() - 1; i++)
 	{
-		Vec2 p1 = World::ground->points[i];
-		Vec2 p2 = World::ground->points[i + 1];
+		Vec2 p1 = ground->points[i];
+		Vec2 p2 = ground->points[i + 1];
+
+		//check if in bounding box
 		float left = p1.x < p2.x ? p1.x : p2.x;
 		float right = p1.x > p2.x ? p1.x : p2.x;
 		float top = p1.y < p2.y ? p1.y : p2.y;
 		float bottom = p1.y > p2.y ? p1.y : p2.y;
-
 		if (left > pos.x + size
 			|| right < pos.x - size
 			|| top > pos.y + size
@@ -33,45 +33,20 @@ void Node::CollisionDetector()
 			continue;
 		}
 
-		bool inside1 = pointCircleCollision(p1, pos, size);
-		bool inside2 = pointCircleCollision(p2, pos, size);
-		if (inside1)
-		{
-			Vec2 direction = Vec2::Normalize(pos - p1);
-			vel = vel - direction * (Vec2::Dot(vel, direction)) * 2 * restitution; // reflection vector http://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
-			forces += direction * mass * 0.1;
-			continue;
-		}
-		else if (inside2)
-		{
-			Vec2 direction = Vec2::Normalize(pos - p2);
-			vel = vel - direction * (Vec2::Dot(vel, direction)) * 2 * restitution; // reflection vector http://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
-			forces += direction * mass * 0.1;
-			continue;
-		}
+		//part to projection point [0-1]
+		float part = std::fmax(0, std::fmin(1, Vec2::Dot(pos - p1, p2 - p1) / Vec2::DistanceSq(p1, p2)));
 
+		Vec2 projection = p1 + (p2 - p1) * part;
 
-		float len = (p2.x - p1.x) * (p2.x - p1.x) + 
-			(p2.y - p1.y) * (p2.y - p1.y);
-		float dot = (((pos.x - p1.x)*(p2.x - p1.x)) + ((pos.y - p1.y)*(p2.y - p1.y))) / len;
-		float closestX = p1.x + (dot * (p2.x - p1.x));
-		float closestY = p1.y + (dot * (p2.y - p1.y));
-		Vec2 closestPoint = Vec2(closestX, closestY);
-		if (!linePointCollision(p1, p2, closestPoint, len))
+		float d = Vec2::DistanceSq(pos, projection);
+		if ( d <= size * size)
 		{
-			continue;
-		}
-		float closestDist = (pos.x - closestPoint.x) *
-			(pos.x - closestPoint.x) + (pos.y - closestPoint.y) * 
-			(pos.y - closestPoint.y);
-		if (closestDist <= size * size)
-		{
-			Vec2 direction = Vec2::Normalize(pos - closestPoint);
-			vel = vel - direction * (Vec2::Dot(vel, direction)) * 2 * restitution; // reflection vector http://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
-			forces += direction * mass * gravity_constant;
+			*collision_point_ptr = projection;
+			return true;
 		}
 	}
-} 
+	return false;
+}
 
 bool Node::linePointCollision(Vec2 point, Vec2 point2, Vec2 closestPoint, float len)
 {

@@ -6,8 +6,8 @@
 class Node
 {
 	float oldTime = 0;
-	std::map<int, int> normal_forces;
 public:
+	bool debug_collides = false;
 	Vec2 gravityForce;
 	float size;
 	float friction;
@@ -20,8 +20,7 @@ public:
 	Vec2 forces;
 	Node(Vec2 pos, float size, float friction, float restitution, float mass = 1, bool gravity = true);
 	~Node();
-	void CollideFlat(float height);
-	void CollisionDetector();
+	bool CollidesWithGround(Ground*, Vec2* collision_point_ptr);
 	static bool linePointCollision(Vec2 point, Vec2 point2, Vec2 closestPoint, float len);
 	static bool pointCircleCollision(Vec2 point, Vec2 circle, float size);
 };

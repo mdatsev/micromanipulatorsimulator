@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "World.h"
 #include <process.h>
-
-Ground* World::ground = new Ground(10, 10);
+//#include "globals.h"
 
 World::World()
 {
@@ -19,7 +18,7 @@ void Simulate(void* param)
 	world->simulation_running = true;
 	while (world->simulation_running)
 	{
-		world->Integrate(0.00001);
+		world->Integrate(0.1);
 	}
 }
 
@@ -98,15 +97,12 @@ void World::Draw(HDC hdc, RECT rect, bool debug)
 				//draw forces
 				SelectObject(hMemDc, bluePen);
 				TCHAR buffer[80];
-				int i = 0;
-				SetTextColor(hMemDc, RGB(0, 0, 255));
+								SetTextColor(hMemDc, RGB(0, 0, 255));
 				SetBkMode(hMemDc, TRANSPARENT);
-
+				_stprintf_s(buffer, _T("c:%d"), n.debug_collides);
+				TextOut(hMemDc, n.pos.x, n.pos.y, buffer, _tcslen(buffer));
 					MoveToEx(hMemDc, n.pos.x, n.pos.y, NULL);
 					LineTo(hMemDc, n.pos.x + n.forces.x * 60, n.pos.y + n.forces.y * 60);
-					_stprintf_s(buffer, _T("%d"), i++);
-					TextOut(hMemDc, n.pos.x + n.forces.x * 60, n.pos.y + n.forces.y * 60, buffer, _tcslen(buffer));
-
 
 				SelectObject(hMemDc, hOldPen);
 				DeleteObject(greenPen);
@@ -127,6 +123,43 @@ void World::Integrate(float dt)
 {
 	for(Creature& c : creatures)
 	{
-		c.Step(dt);
+		for (Node& n : c.nodes)
+		{
+			n.forces = n.gravityForce;
+		}
+
+		for (Muscle& m : c.muscles)
+		{
+			Vec2 force_direction1 = Vec2::Normalize(c.nodes[m.node2_ID].pos - c.nodes[m.node1_ID].pos);
+			Vec2 force_direction2 = Vec2::Normalize(c.nodes[m.node1_ID].pos - c.nodes[m.node2_ID].pos);
+			float length = Vec2::Distance(c.nodes[m.node1_ID].pos, c.nodes[m.node2_ID].pos);
+			float displacement = length - m.target_length;
+			c.nodes[m.node1_ID].forces += force_direction1  *  m.stiffness * displacement;
+			c.nodes[m.node2_ID].forces += force_direction2  * m.stiffness * displacement;
+		}
+
+		for (Node& n : c.nodes)
+		{
+			Ground* ground = World::ground;
+			for (int i = 0; i < World::ground->points.size() - 1; i++)
+			{
+				n.debug_collides = false;
+				Vec2 closestPoint;
+				if (n.CollidesWithGround(ground, &closestPoint))
+				{
+					n.debug_collides = true;
+					Vec2 direction = Vec2::Normalize(n.pos - closestPoint);
+					n.pos = closestPoint + direction * n.size * 1.0001;
+					// reflection vector http://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
+					n.vel = n.vel - direction * (Vec2::Dot(n.vel, direction)) * 2 * n.restitution; 
+					float gravity_constant = 0.1;  n.forces += direction * n.mass * gravity_constant;
+				}
+			}
+			//n.CollideFlat(500);
+			n.acc = n.forces / n.mass;
+			n.vel += n.acc * dt;
+			//n.vel *= n.airFriction;
+			n.pos += n.vel * dt;
+		}
 	}
 }

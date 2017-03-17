@@ -37,6 +37,11 @@ float Vec2::Distance(Vec2 v1, Vec2 v2)
 	return sqrt(pow((v2.x - v1.x), 2) + pow((v2.y - v1.y), 2));
 }
 
+float Vec2::DistanceSq(Vec2 v1, Vec2 v2)
+{
+	return pow((v2.x - v1.x), 2) + pow((v2.y - v1.y), 2);
+}
+
 float Vec2::Dot(Vec2 v1, Vec2 v2)
 {
 	return v1.x*v2.x + v1.y*v2.y;
