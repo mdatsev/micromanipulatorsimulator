@@ -47,25 +47,3 @@ bool Node::CollidesWithGround(Ground* ground, Vec2* collision_point_ptr)
 	}
 	return false;
 }
-
-bool Node::linePointCollision(Vec2 point, Vec2 point2, Vec2 closestPoint, float len)
-{
-	float dist1 = Vec2::Distance(point, closestPoint);
-	float dist2 = Vec2::Distance(point2, closestPoint);
-
-
-	if (dist1 * dist1 + dist2 * dist2 >= len - 2 * dist2 * dist1 && 
-		dist1 * dist1 + dist2 * dist2 <= len - 2 * dist2 * dist1) {
-		return true;
-	}
-	return false;
-}
-
-bool Node::pointCircleCollision(Vec2 point, Vec2 circle, float size)
-{
-	float distance = Vec2::Distance(point, circle);
-	if (distance <= size) {
-		return true;
-	}
-	return false;
-}
