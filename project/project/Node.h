@@ -5,21 +5,22 @@
 #include <map>
 class Node
 {
-	float oldTime = 0;
+	double oldTime = 0;
 public:
-	bool debug_collides = false;
+	int debug_collides;
+	Vec2 debug_vec2;
 	Vec2 gravityForce;
-	float size;
-	float friction;
-	float airFriction = 1;
-	float mass;
-	float restitution;
+	double size;
+	double friction;
+	double airFriction = 1;
+	double mass;
+	double restitution;
 	Vec2 pos;
 	Vec2 vel;
 	Vec2 acc;
 	Vec2 forces;
-	Node(Vec2 pos, float size, float friction, float restitution, float mass = 1, bool gravity = true);
+	Node(Vec2 pos, double size, double friction, double restitution, double mass = 1, bool gravity = true);
 	~Node();
-	bool CollidesWithGround(Ground*, Vec2* collision_point_ptr);
+	void CollideWithGround(Ground*, double dt);
 };
 

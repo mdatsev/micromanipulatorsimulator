@@ -2,7 +2,7 @@
 #include "Ground.h"
 
 
-Ground::Ground(float height, float friction) : height(height), friction(friction)
+Ground::Ground(double height, double friction) : height(height), friction(friction)
 {
 }
 

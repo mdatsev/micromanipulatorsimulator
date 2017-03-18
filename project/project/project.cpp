@@ -7,7 +7,7 @@
 #include <time.h>
 
 #define MAX_LOADSTRING 100
-
+//#define THREAD
 // Global Variables:
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
@@ -120,15 +120,15 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    Creature c;
    Ground* g = new Ground(10, 10);
    
-   c.AddNode(Node(Vec2(400 + offx, 0 + offy), 25, 1, 0.75, 1, true));
+   c.AddNode(Node(Vec2(400 + offx, 0 + offy), 25, 0.45, 0.45, 1, true));
    //c.AddNode(Node(Vec2(900 + offx, 0 + offy), 25, 1, 0.75, 1, true));
 
 
    //c.AddMuscle(Muscle(0, 1, 0.0001, 100));
-   //g->AddPoint(Vec2(0 + offx, 500 + offy));
-   //g->AddPoint(Vec2(1000 + offx, 500 + offy));
-
-   
+#if 0
+   g->AddPoint(Vec2(0 + offx, 500 + offy));
+   g->AddPoint(Vec2(1000 + offx, 500 + offy));
+#else
    g->AddPoint(Vec2(0 + offx, 100 + offy));
    g->AddPoint(Vec2(300 + offx, 400 + offy));
    g->AddPoint(Vec2(300 + offx, 350 + offy));
@@ -137,12 +137,16 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    g->AddPoint(Vec2(750 + offx, 300 + offy));
    g->AddPoint(Vec2(900 + offx, 400 + offy));
    g->AddPoint(Vec2(1000 + offx, 400 + offy));
+#endif
    
    
 
    world.AddCreature(c);
    world.ground = g;
-   //world.StartSimulation();
+#ifdef THREAD
+   world.StartSimulation();
+#endif // THRE
+
    SetTimer(hWnd, 1, 1000/60, NULL);
 
    return TRUE;
@@ -193,13 +197,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             HDC hdc = BeginPaint(hWnd, &ps);
 			RECT rc;
 			GetClientRect(hWnd, &rc);
-			float precision = 100;
+#ifndef THREAD
+			double precision = 1000;
 			for (int i = 0; i < precision; i++)
 			{
 				world.Integrate(1/precision);
 			}
 			world.Draw(hdc, rc, true);
             EndPaint(hWnd, &ps);
+#endif
         }
         break;
     case WM_DESTROY:

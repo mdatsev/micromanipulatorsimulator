@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Creature.h"
-#include "Node.h"
 
 
 Creature::Creature()

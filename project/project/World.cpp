@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "World.h"
 #include <process.h>
-//#include "globals.h"
+#include "constants.h"
 
 World::World()
 {
@@ -18,7 +18,7 @@ void Simulate(void* param)
 	world->simulation_running = true;
 	while (world->simulation_running)
 	{
-		world->Integrate(0.1);
+		world->Integrate(0.001);
 	}
 }
 
@@ -65,10 +65,10 @@ void World::Draw(HDC hdc, RECT rect, bool debug)
 
 		for (Muscle& n : c.muscles)
 		{
-			float x1 = c.nodes[n.node1_ID].pos.x;
-			float y1 = c.nodes[n.node1_ID].pos.y;
-			float x2 = c.nodes[n.node2_ID].pos.x;
-			float y2 = c.nodes[n.node2_ID].pos.y;
+			double x1 = c.nodes[n.node1_ID].pos.x;
+			double y1 = c.nodes[n.node1_ID].pos.y;
+			double x2 = c.nodes[n.node2_ID].pos.x;
+			double y2 = c.nodes[n.node2_ID].pos.y;
 			MoveToEx(hMemDc, x1, y1, NULL);
 			LineTo(hMemDc, x2, y2);
 		}
@@ -83,6 +83,7 @@ void World::Draw(HDC hdc, RECT rect, bool debug)
 				HPEN redPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
 				HPEN greenPen = CreatePen(PS_SOLID, 1, RGB(0, 255, 0));
 				HPEN bluePen = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
+				HPEN yellowPen = CreatePen(PS_SOLID, 1, RGB(0, 255, 255));
 
 				HPEN hOldPen = (HPEN)SelectObject(hMemDc, greenPen);
 				//draw velocity			
@@ -103,11 +104,19 @@ void World::Draw(HDC hdc, RECT rect, bool debug)
 				TextOut(hMemDc, n.pos.x, n.pos.y, buffer, _tcslen(buffer));
 					MoveToEx(hMemDc, n.pos.x, n.pos.y, NULL);
 					LineTo(hMemDc, n.pos.x + n.forces.x * 60, n.pos.y + n.forces.y * 60);
-
+					SelectObject(hMemDc, yellowPen);
+					_stprintf_s(buffer, _T("mag:%f"), n.debug_vec2.Magnitude());
+					TextOut(hMemDc, 0, 0, buffer, _tcslen(buffer));
+					MoveToEx(hMemDc, n.pos.x, n.pos.y, NULL);
+					LineTo(hMemDc, n.pos.x + n.debug_vec2.x, n.pos.y + n.debug_vec2.y);
+					
+					MoveToEx(hMemDc, 0, 100, NULL);
+					LineTo(hMemDc, 1999, 100);
 				SelectObject(hMemDc, hOldPen);
 				DeleteObject(greenPen);
 				DeleteObject(redPen);
 				DeleteObject(bluePen);
+				DeleteObject(yellowPen);
 			}
 		}
 	}
@@ -119,46 +128,35 @@ void World::Draw(HDC hdc, RECT rect, bool debug)
 	DeleteDC(hMemDc);
 }
 
-void World::Integrate(float dt)
+void World::Integrate(double dt)
 {
 	for(Creature& c : creatures)
 	{
-		for (Node& n : c.nodes)
+		for (Node& n : c.nodes) 
 		{
 			n.forces = n.gravityForce;
 		}
 
 		for (Muscle& m : c.muscles)
 		{
-			Vec2 force_direction1 = Vec2::Normalize(c.nodes[m.node2_ID].pos - c.nodes[m.node1_ID].pos);
-			Vec2 force_direction2 = Vec2::Normalize(c.nodes[m.node1_ID].pos - c.nodes[m.node2_ID].pos);
-			float length = Vec2::Distance(c.nodes[m.node1_ID].pos, c.nodes[m.node2_ID].pos);
-			float displacement = length - m.target_length;
+			Vec2 force_direction1 = c.nodes[m.node2_ID].pos - c.nodes[m.node1_ID].pos;
+			force_direction1.Normalize();
+			Vec2 force_direction2 = c.nodes[m.node1_ID].pos - c.nodes[m.node2_ID].pos;
+			force_direction2.Normalize();
+			double length = c.nodes[m.node1_ID].pos.Distance(c.nodes[m.node2_ID].pos);
+			double displacement = length - m.target_length;
 			c.nodes[m.node1_ID].forces += force_direction1  *  m.stiffness * displacement;
 			c.nodes[m.node2_ID].forces += force_direction2  * m.stiffness * displacement;
 		}
 
 		for (Node& n : c.nodes)
 		{
-			Ground* ground = World::ground;
-			for (int i = 0; i < World::ground->points.size() - 1; i++)
-			{
-				n.debug_collides = false;
-				Vec2 closestPoint;
-				if (n.CollidesWithGround(ground, &closestPoint))
-				{
-					n.debug_collides = true;
-					Vec2 direction = Vec2::Normalize(n.pos - closestPoint);
-					n.pos = closestPoint + direction * n.size * 1.0001;
-					// reflection vector http://math.stackexchange.com/questions/13261/how-to-get-a-reflection-vector
-					n.vel = n.vel - direction * (Vec2::Dot(n.vel, direction)) * 2 * n.restitution; 
-					float gravity_constant = 0.1;  n.forces += direction * n.mass * gravity_constant;
-				}
-			}
+			n.CollideWithGround(ground, dt);
+
 			//n.CollideFlat(500);
 			n.acc = n.forces / n.mass;
 			n.vel += n.acc * dt;
-			//n.vel *= n.airFriction;
+			n.vel *= n.airFriction;
 			n.pos += n.vel * dt;
 		}
 	}

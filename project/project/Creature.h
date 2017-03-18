@@ -10,7 +10,6 @@ public:
 	std::vector<Muscle> muscles;
 	Creature();
 	~Creature();
-	void Step(float dt);
 	void AddNode(Node);
 	void AddMuscle(Muscle);
 };

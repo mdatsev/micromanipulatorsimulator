@@ -8,12 +8,12 @@ class World
 public:
 	bool simulation_running;
 	Ground* ground;
-	float flat_ground_y;
+	double flat_ground_y;
 	World();
 	~World();
 	void StartSimulation();
 	void StopSimulation();
 	void AddCreature(Creature);
 	void Draw(HDC, RECT, bool = false);
-	void Integrate(float dt);
+	void Integrate(double dt);
 };

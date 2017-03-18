@@ -4,10 +4,10 @@
 class Ground
 {
 public:
-	float height;
-	float friction;
+	double height;
+	double friction;
 	std::vector<Vec2> points;
-	Ground(float height, float friction);
+	Ground(double height, double friction);
 	void AddPoint(Vec2);
 	~Ground();
 };
