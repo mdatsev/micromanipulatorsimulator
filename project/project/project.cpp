@@ -121,13 +121,14 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    Ground* g = new Ground(10, 10);
    
    c.AddNode(Node(Vec2(200 + offx, 0 + offy), 25, 0.1, 0.01, 100, true));
-   c.AddNode(Node(Vec2(0 + offx, 300 + offy), 25, 0.1, 0.01, 100, true));
+   c.AddNode(Node(Vec2(0 + offx, 300 + offy), 25, 0.3, 0.01, 100, true));
    c.AddNode(Node(Vec2(400 + offx, 300 + offy), 25, 0.1, 0.01, 100, true));
 
    Muscle m = Muscle(0, 1, 500, 300);
    Muscle m2 = Muscle(0, 2, 500, 300);
    Muscle m3 = Muscle(1, 2, 500, 200);
    m.length_cycle.push_back(LengthTimePair(1, 2));
+   m.length_cycle.push_back(LengthTimePair(0.95, 2));
    m2.length_cycle.push_back(LengthTimePair(1, 2));
    m3.length_cycle.push_back(LengthTimePair(1, 2));
    c.AddMuscle(m);

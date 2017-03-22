@@ -55,10 +55,10 @@ void World::Draw(HDC hdc, RECT rect, bool debug)
 
 		for (Node& n : c.nodes)
 		{
-			int mass = n.mass;
-			if (mass > 255)
-				mass = 255;
-			int color = 255 - mass;
+			int color = n.friction * 255;
+			if (color > 255)
+				color = 255;
+			color = 255 - color;
 			SelectObject(hMemDc, CreateSolidBrush(RGB(color, color, color)));
 			Ellipse(hMemDc, n.pos.x - n.size, n.pos.y - n.size, n.pos.x + n.size, n.pos.y + n.size);
 		}
