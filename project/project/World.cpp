@@ -83,7 +83,7 @@ void World::Draw(HDC hdc, RECT rect, bool debug)
 				HPEN redPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
 				HPEN greenPen = CreatePen(PS_SOLID, 1, RGB(0, 255, 0));
 				HPEN bluePen = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
-				HPEN yellowPen = CreatePen(PS_SOLID, 1, RGB(0, 255, 255));
+				HPEN cyanPen = CreatePen(PS_SOLID, 1, RGB(0, 255, 255));
 
 				HPEN hOldPen = (HPEN)SelectObject(hMemDc, greenPen);
 				//draw velocity			
@@ -98,25 +98,24 @@ void World::Draw(HDC hdc, RECT rect, bool debug)
 				//draw forces
 				SelectObject(hMemDc, bluePen);
 				TCHAR buffer[80];
-								SetTextColor(hMemDc, RGB(0, 0, 255));
+				SetTextColor(hMemDc, RGB(0, 0, 255));
 				SetBkMode(hMemDc, TRANSPARENT);
-				_stprintf_s(buffer, _T("c:%d"), n.debug_collides);
+				_stprintf_s(buffer, _T("x:%f"), n.pos.x);
 				TextOut(hMemDc, n.pos.x, n.pos.y, buffer, _tcslen(buffer));
-					MoveToEx(hMemDc, n.pos.x, n.pos.y, NULL);
-					LineTo(hMemDc, n.pos.x + n.forces.x * 60, n.pos.y + n.forces.y * 60);
-					SelectObject(hMemDc, yellowPen);
-					_stprintf_s(buffer, _T("mag:%f"), n.debug_vec2.Magnitude());
-					TextOut(hMemDc, 0, 0, buffer, _tcslen(buffer));
-					MoveToEx(hMemDc, n.pos.x, n.pos.y, NULL);
-					LineTo(hMemDc, n.pos.x + n.debug_vec2.x, n.pos.y + n.debug_vec2.y);
+				MoveToEx(hMemDc, n.pos.x, n.pos.y, NULL);
+				LineTo(hMemDc, n.pos.x + n.forces.x * 60, n.pos.y + n.forces.y * 60);
+
+				//SelectObject(hMemDc, cyanPen);
+				//_stprintf_s(buffer, _T("musc:%f"), c.muscles[0].cycle_time);
+				//TextOut(hMemDc, 0, 0, buffer, _tcslen(buffer));
+				//MoveToEx(hMemDc, n.pos.x, n.pos.y, NULL);
+				//LineTo(hMemDc, n.pos.x + n.debug_vec2.x, n.pos.y + n.debug_vec2.y);
 					
-					MoveToEx(hMemDc, 0, 100, NULL);
-					LineTo(hMemDc, 1999, 100);
 				SelectObject(hMemDc, hOldPen);
 				DeleteObject(greenPen);
 				DeleteObject(redPen);
 				DeleteObject(bluePen);
-				DeleteObject(yellowPen);
+				DeleteObject(cyanPen);
 			}
 		}
 	}
@@ -144,19 +143,40 @@ void World::Integrate(double dt)
 			Vec2 force_direction2 = c.nodes[m.node1_ID].pos - c.nodes[m.node2_ID].pos;
 			force_direction2.Normalize();
 			double length = c.nodes[m.node1_ID].pos.Distance(c.nodes[m.node2_ID].pos);
-			double displacement = length - m.target_length;
-			c.nodes[m.node1_ID].forces += force_direction1  *  m.stiffness * displacement;
-			c.nodes[m.node2_ID].forces += force_direction2  * m.stiffness * displacement;
+			double displacement = length - m.target_length();
+			if (m.cycle_time > m.length_cycle[m.cycle_stage].time)
+			{
+				if (m.cycle_stage >= m.length_cycle.size() - 1)
+				{
+					m.cycle_stage = 0;
+				}
+				else
+				{
+					m.cycle_stage++;
+				}
+				m.cycle_time = 0;
+			}
+			m.cycle_time += dt;
+#if 0
+			double forceMag = (1 - (m.target_length() / length)) *  m.stiffness;
+			c.nodes[m.node1_ID].forces += force_direction1 * forceMag;
+			c.nodes[m.node2_ID].forces += force_direction2 * forceMag;
+#else
+			double forceMag = m.stiffness * displacement;
+			c.nodes[m.node1_ID].forces += force_direction1  * forceMag;
+			c.nodes[m.node2_ID].forces += force_direction2  * forceMag;
+#endif
 		}
+
 
 		for (Node& n : c.nodes)
 		{
 			n.CollideWithGround(ground, dt);
 
 			//n.CollideFlat(500);
+			n.forces -= n.vel * n.size * n.airFriction;
 			n.acc = n.forces / n.mass;
 			n.vel += n.acc * dt;
-			n.vel *= n.airFriction;
 			n.pos += n.vel * dt;
 		}
 	}

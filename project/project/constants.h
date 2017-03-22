@@ -1,4 +1,4 @@
 #pragma once
 
-#define gravity_constant  0.1
+#define gravity_constant  98.1
 

@@ -114,20 +114,28 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
-   int offx = 0;
-   int offy = 0;
+   int offx = 100;
+   int offy = 200;
 
    Creature c;
    Ground* g = new Ground(10, 10);
    
-   c.AddNode(Node(Vec2(400 + offx, 0 + offy), 25, 0.45, 0.45, 1, true));
-   //c.AddNode(Node(Vec2(900 + offx, 0 + offy), 25, 1, 0.75, 1, true));
+   c.AddNode(Node(Vec2(200 + offx, 0 + offy), 25, 0.1, 0.01, 100, true));
+   c.AddNode(Node(Vec2(0 + offx, 300 + offy), 25, 0.1, 0.01, 100, true));
+   c.AddNode(Node(Vec2(400 + offx, 300 + offy), 25, 0.1, 0.01, 100, true));
 
-
-   //c.AddMuscle(Muscle(0, 1, 0.0001, 100));
-#if 0
-   g->AddPoint(Vec2(0 + offx, 500 + offy));
-   g->AddPoint(Vec2(1000 + offx, 500 + offy));
+   Muscle m = Muscle(0, 1, 500, 300);
+   Muscle m2 = Muscle(0, 2, 500, 300);
+   Muscle m3 = Muscle(1, 2, 500, 200);
+   m.length_cycle.push_back(LengthTimePair(1, 2));
+   m2.length_cycle.push_back(LengthTimePair(1, 2));
+   m3.length_cycle.push_back(LengthTimePair(1, 2));
+   c.AddMuscle(m);
+   c.AddMuscle(m2);
+   c.AddMuscle(m3);
+#if 1
+   g->AddPoint(Vec2(-1000 + offx, 500 + offy));
+   g->AddPoint(Vec2(2000 + offx, 500 + offy));
 #else
    g->AddPoint(Vec2(0 + offx, 100 + offy));
    g->AddPoint(Vec2(300 + offx, 400 + offy));
@@ -201,7 +209,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			double precision = 1000;
 			for (int i = 0; i < precision; i++)
 			{
-				world.Integrate(1/precision);
+				world.Integrate(1/precision/60);
 			}
 			world.Draw(hdc, rc, true);
             EndPaint(hWnd, &ps);
