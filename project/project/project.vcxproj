@@ -142,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Creature.h" />
+    <ClInclude Include="Generation.h" />
     <ClInclude Include="LengthTimePair.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="constants.h" />
@@ -156,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Creature.cpp" />
+    <ClCompile Include="Generation.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Muscle.cpp" />
     <ClCompile Include="Node.cpp" />
