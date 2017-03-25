@@ -150,7 +150,7 @@ void Creature::CheckOverlap(Node& node, int overlapDistance)
 	}
 }
 
-Vec2 Creature::AverageDistance()
+Vec2 Creature::AveragePosition()
 {
 	double avgX = 0;
 	double avgY = 0;
