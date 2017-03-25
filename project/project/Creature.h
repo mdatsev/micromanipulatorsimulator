@@ -18,6 +18,7 @@ public:
 	void CheckOverlap(Node& node, int overlapDistance);
 	Vec2 AveragePosition();
 	void Mutate();
+	void RemoveALoneNode();
 	Vec2 AveragePosition();
 };
 
