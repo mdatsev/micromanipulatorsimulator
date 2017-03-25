@@ -1,2 +1,1 @@
-# secretprojectdontlookhere
-very secret dont look pls
+Genetic algorithm makes creatures move right
