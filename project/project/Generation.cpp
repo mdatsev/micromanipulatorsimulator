@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Generation.h"
+#include <random>
 
 
 void Generation::GenerateRandom()
@@ -22,10 +23,16 @@ void Generation::MeasureFitness()
 {
 	for (Creature& c : creatures)
 	{
+		c.fitness = c.AveragePosition().x;
 		world.AddCreature(c);
+
 	}
-	world.StartSimulation(15);
-	
+	HANDLE hThread = world.StartSimulation(15);
+	WaitForSingleObject(world.hThread, INFINITE);
+	for (Creature& c : creatures)
+	{
+		c.fitness = c.AveragePosition().x - c.fitness;
+	}
 }
 
 void Generation::KillAndBreed()
