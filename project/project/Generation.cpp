@@ -19,7 +19,7 @@ void Generation::GenerateRandom()
 	}
 }
 
-void Generation::MeasureFitness()
+void Generation::Simulate(int time)
 {
 	for (Creature& c : creatures)
 	{
@@ -27,8 +27,12 @@ void Generation::MeasureFitness()
 		world.AddCreature(c);
 
 	}
-	HANDLE hThread = world.StartSimulation(1500);
+	HANDLE hThread = world.StartSimulation(time);
 	WaitForSingleObject(world.hThread, INFINITE);
+}
+
+void Generation::MeasureDistances()
+{
 	for (Creature& c : creatures)
 	{
 		c.fitness = c.AveragePosition().x - c.fitness;
@@ -36,7 +40,7 @@ void Generation::MeasureFitness()
 }
 
 void Generation::KillAndBreed()
-{
+{	
 	
 }
 
