@@ -104,3 +104,16 @@ void Creature::CheckOverlap(Node& node, int overlapDistance)
 		}
 	}
 }
+
+Vec2 Creature::AverageDistance()
+{
+	double avgX = 0;
+	double avgY = 0;
+	for (Node& n : nodes)
+	{
+		avgX += n.pos.x;
+		avgY += n.pos.y;
+	}
+	int n = nodes.size();
+	return Vec2(avgX / n, avgY / n);
+}

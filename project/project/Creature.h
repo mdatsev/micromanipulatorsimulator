@@ -14,5 +14,6 @@ public:
 	void AddMuscle(Muscle);
 	void CreateRandom();
 	void CheckOverlap(Node& node, int overlapDistance);
+	Vec2 AverageDistance();
 };
 

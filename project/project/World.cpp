@@ -117,6 +117,8 @@ void World::Draw(HDC hdc, RECT rect, bool debug)
 				DeleteObject(bluePen);
 				DeleteObject(cyanPen);
 			}
+			SelectObject(hMemDc, CreateSolidBrush(RGB(255, 0, 0)));
+			Ellipse(hMemDc, c.AverageDistance().x - 5, c.AverageDistance().y - 5, c.AverageDistance().x + 5, c.AverageDistance().y + 5);
 		}
 	}
 

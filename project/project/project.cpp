@@ -114,8 +114,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
-   int offx = 100;
-   int offy = 200;
+   int offx = 0;
+   int offy = 0;
 
    Creature c;
    Ground* g = new Ground(10, 10);
