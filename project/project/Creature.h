@@ -19,6 +19,5 @@ public:
 	Vec2 AveragePosition();
 	void Mutate();
 	void RemoveALoneNode();
-	Vec2 AveragePosition();
 };
 

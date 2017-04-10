@@ -61,7 +61,7 @@ void Creature::CreateRandom()
 		nodeY = distD(gen);
 		distD = std::uniform_real_distribution<double>(min_friction, max_friction);
 		friction = distD(gen);
-		distD = std::uniform_real_distribution<double>(min_restitution, max_friction);
+		distD = std::uniform_real_distribution<double>(min_restitution, max_restitution);
 		restitution = distD(gen);
 		distD = std::uniform_real_distribution<double>(min_mass, max_mass);
 		mass = distD(gen);
@@ -146,7 +146,7 @@ void Creature::Mutate()
 				double size = distD(gen);
 				distD = std::uniform_real_distribution<double>(min_friction, max_friction);
 				double friction = distD(gen);
-				distD = std::uniform_real_distribution<double>(min_restitution, max_friction);
+				distD = std::uniform_real_distribution<double>(min_restitution, max_restitution);
 				double restitution = distD(gen);
 				distD = std::uniform_real_distribution<double>(min_mass, max_mass);
 				double mass = distD(gen);
