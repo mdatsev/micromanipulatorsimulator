@@ -51,9 +51,22 @@ void World::StopSimulation()
 	simulation_running = false;
 }
 
-void World::AddCreature(Creature n)
+void World::AddCreature(Creature c)
 {
-	creatures.push_back(n);
+	int lowest_node = 0;
+	for (int i = 1; i < c.nodes.size(); i++)
+	{
+		if (c.nodes[i].pos.y > c.nodes[lowest_node].pos.y)
+		{
+			lowest_node = i;
+		}
+	}
+	double y_offset = c.nodes[lowest_node].pos.y + c.nodes[lowest_node].size;
+	for (Node& n : c.nodes)
+	{
+		n.pos.y -= y_offset;
+	}
+	creatures.push_back(c);
 }
 
 void World::Clear()

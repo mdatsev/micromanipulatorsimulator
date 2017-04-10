@@ -5,7 +5,7 @@
 #include "Config.h"
 #include <process.h>
 #include <mutex>
-	
+
 void Generation::GenerateRandom()
 {
 	for (int i = 0; i < size; i++)
@@ -18,7 +18,7 @@ void Generation::GenerateRandom()
 			continue;
 		}
 		//c.Mutate();
-		world.creatures.push_back(c);
+		world.AddCreature(c);
 	}
 }
 

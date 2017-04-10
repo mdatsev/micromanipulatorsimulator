@@ -5,10 +5,11 @@ static std::mt19937 gen(seed);
 #define gravity_constant 1000
 #define air_friction 0.4
 #define generation_size 1000
-#define delta_time 0.001
+#define delta_time 0.0001
 #define one_generation_time 15
+#define draw_scale 0.1
 //generator parameters
-#define max_dimension 200
+#define max_dimension 2000
 #define min_nodes 3
 #define max_nodes 6 
 #define min_size 5

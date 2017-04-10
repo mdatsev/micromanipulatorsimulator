@@ -16,6 +16,7 @@ WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
 Generation *generation = new Generation(generation_size);
+double scale = draw_scale;
 
 
 // Forward declarations of functions included in this code module:
@@ -116,8 +117,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    UpdateWindow(hWnd);
    Ground* g = new Ground(10,10);
 #if 1
-   g->AddPoint(Vec2(-100000, 200));
-   g->AddPoint(Vec2(2000000, 200));
+   g->AddPoint(Vec2(-10000, 0));
+   g->AddPoint(Vec2(20000, 0));
 #else
    g->AddPoint(Vec2(0, 200));
    g->AddPoint(Vec2(300 , 400));
@@ -129,8 +130,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    g->AddPoint(Vec2(1000, 400));
 #endif
    generation->world.ground = g;
-#ifdef THREAD
    generation->GenerateRandom();
+#ifdef THREAD
    generation->DoGenerations();
 #endif
 
@@ -188,7 +189,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			double precision = 1000;
 			for (int i = 0; i < precision; i++)
 			{
-				generation.world.Integrate(1/precision/60);
+				generation->world.Integrate(1/precision/60);
 			}
 #endif
 			int fastest = 0;
@@ -201,7 +202,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				}
 			}
 			generation->world.g_num_mutex.unlock();
-			generation->world.Draw(hdc, rc, 1,
+			generation->world.Draw(hdc, rc, scale,
 				generation->world.creatures.size() ?
 				generation->world.creatures[fastest].AveragePosition() :
 				Vec2(0,0), false);
