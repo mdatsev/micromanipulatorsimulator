@@ -56,7 +56,7 @@ void World::AddCreature(Creature c)
 	int lowest_node = 0;
 	for (int i = 1; i < c.nodes.size(); i++)
 	{
-		if (c.nodes[i].pos.y > c.nodes[lowest_node].pos.y)
+		if (c.nodes[i].pos.y + c.nodes[i].size > c.nodes[lowest_node].pos.y + c.nodes[lowest_node].size)
 		{
 			lowest_node = i;
 		}
