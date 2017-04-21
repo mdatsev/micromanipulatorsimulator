@@ -216,6 +216,8 @@ void World::Draw(HDC hdc, RECT rect, double scale, Vec2 center, bool debug)
 	DeleteObject(cyanPen);
 	DeleteObject(hBrush);
 	DeleteObject(hBmp);
+	DeleteObject(lightPen);
+	DeleteObject(lightPen2);
 	DeleteDC(hMemDc);
 }
 
