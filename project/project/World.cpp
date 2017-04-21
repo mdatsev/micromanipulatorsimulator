@@ -53,7 +53,6 @@ void World::StopSimulation()
 
 void World::AddCreature(Creature c)
 {
-	/*
 	int lowest_node = 0;
 	for (int i = 1; i < c.nodes.size(); i++)
 	{
@@ -67,7 +66,6 @@ void World::AddCreature(Creature c)
 	{
 		n.pos.y -= y_offset;
 	}
-	*/
 	creatures.push_back(c);
 }
 
@@ -84,7 +82,7 @@ void World::Draw(HDC hdc, RECT rect, double scale, Vec2 center, bool debug)
 	);
 	double xoff = -top_left_point.x;
 	double yoff = -top_left_point.y;
-	
+
 	HDC hMemDc = CreateCompatibleDC(hdc);
 	HBITMAP hBmp = CreateCompatibleBitmap(hdc, rect.right, rect.bottom);
 	SelectObject(hMemDc, hBmp);
@@ -98,6 +96,9 @@ void World::Draw(HDC hdc, RECT rect, double scale, Vec2 center, bool debug)
 	HPEN hOldPen = (HPEN)SelectObject(hMemDc, hBrush);
 
 	TCHAR buffer[80];
+
+	double ruler = 100;
+
 
 	g_num_mutex.lock();
 	SetTextColor(hMemDc, RGB(0, 0, 255));
@@ -118,14 +119,20 @@ void World::Draw(HDC hdc, RECT rect, double scale, Vec2 center, bool debug)
 			if (color > 255)
 				color = 255;
 			color = 255 - color;
-			HBRUSH brush = CreateSolidBrush(RGB(color, color, color));
+
+			int color2 = n.restitution * 255;
+			if (color2 > 255)
+				color2 = 255;
+			color2 = 255 - color2;
+
+			HBRUSH brush = CreateSolidBrush(RGB(color, color2, 128));
 			SelectObject(hMemDc, brush);
-			DeleteObject(brush);
 			Ellipse(hMemDc, 
 				n.pos.x * scale - n.size * scale + xoff, 
 				n.pos.y * scale - n.size * scale + yoff,
 				n.pos.x * scale + n.size * scale + xoff, 
 				n.pos.y * scale + n.size * scale + yoff);
+			DeleteObject(brush);
 		}
 
 		for (Muscle& n : c.muscles)

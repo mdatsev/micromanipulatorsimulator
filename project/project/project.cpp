@@ -117,8 +117,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    UpdateWindow(hWnd);
    Ground* g = new Ground(10,10);
 #if 1
-   g->AddPoint(Vec2(-10000, 200));
-   g->AddPoint(Vec2(20000, 200));
+   g->AddPoint(Vec2(-1000000, 0));
+   g->AddPoint(Vec2(2000000, 0));
 #else
    g->AddPoint(Vec2(0, 200));
    g->AddPoint(Vec2(300 , 400));
