@@ -120,6 +120,11 @@ void Creature::CreateRandom()
 		}
 		
 	}
+
+	if (muscles.size() < 1 || nodes.size() < 3)
+	{
+		this->CreateRandom(); //FIX
+	}
 	
 }
 
@@ -272,6 +277,8 @@ void Creature::Mutate()
 		}
 	}
 	
+
+
 	if (muscles.size() < 1 || nodes.size() < 3)
 	{
 		*this = original;
