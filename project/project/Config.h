@@ -1,23 +1,23 @@
 #pragma once
 #include <random>
-#define seed 2
+#define seed 30
 static std::mt19937 gen(seed);
 #define gravity_constant 1000
 #define air_friction 0.4
 #define generation_size 1000
-#define delta_time 0.0001
+#define delta_time 0.0005
 #define one_generation_time 15
-#define draw_scale 0.1
+#define draw_scale 1
 //generator parameters
-#define max_dimension 2000
+#define max_dimension 200
 #define min_nodes 3
 #define max_nodes 6 
 #define min_size 5
 #define max_size 25
 #define min_friction 0
 #define max_friction 1
-#define min_restitution  0
-#define max_restitution 0
+#define min_restitution 0
+#define max_restitution 1
 #define min_mass 1
 #define max_mass 1
 #define min_muscles 1
