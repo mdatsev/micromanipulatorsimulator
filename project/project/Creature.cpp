@@ -139,7 +139,7 @@ void Creature::Mutate()
 		{
 			if (node_or_muscle) 
 			{
-				distI = std::uniform_int_distribution<int>(0, max_dimension);
+				distI = std::uniform_int_distribution<int>(-max_dimension, 0);
 				int nodeX = distI(gen);
 				int nodeY = distI(gen);
 				distD = std::uniform_real_distribution<double>(min_size, max_size);

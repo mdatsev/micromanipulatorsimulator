@@ -99,6 +99,12 @@ void World::Draw(HDC hdc, RECT rect, double scale, Vec2 center, bool debug)
 
 	double ruler = 100;
 
+	for (int i = fmod(top_left_point.x, ruler); i < rect.right; i += ruler)
+	{
+		MoveToEx(hMemDc, i, rect.top, NULL);
+		LineTo(hMemDc, i, rect.bottom);
+	}
+
 
 	g_num_mutex.lock();
 	SetTextColor(hMemDc, RGB(0, 0, 255));
