@@ -53,6 +53,7 @@ void World::StopSimulation()
 
 void World::AddCreature(Creature c)
 {
+	/*
 	int lowest_node = 0;
 	for (int i = 1; i < c.nodes.size(); i++)
 	{
@@ -66,6 +67,7 @@ void World::AddCreature(Creature c)
 	{
 		n.pos.y -= y_offset;
 	}
+	*/
 	creatures.push_back(c);
 }
 
