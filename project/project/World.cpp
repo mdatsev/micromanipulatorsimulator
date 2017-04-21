@@ -92,20 +92,32 @@ void World::Draw(HDC hdc, RECT rect, double scale, Vec2 center, bool debug)
 	HPEN greenPen = CreatePen(PS_SOLID, 1, RGB(0, 255, 0));
 	HPEN bluePen = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
 	HPEN cyanPen = CreatePen(PS_SOLID, 1, RGB(0, 255, 255));
+	HPEN lightPen = CreatePen(PS_SOLID, 1, RGB(230, 230, 230));
+	HPEN lightPen2 = CreatePen(PS_SOLID, 1, RGB(170, 170, 170));
+	HPEN blackPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
 	HBRUSH solidBrush = CreateSolidBrush(RGB(255, 0, 0));
-	HPEN hOldPen = (HPEN)SelectObject(hMemDc, hBrush);
+	HPEN hOldPen = (HPEN)SelectObject(hMemDc, lightPen);
 
 	TCHAR buffer[80];
 
-	double ruler = 100;
+	double bigRuler = 150;
+	double smallRuler = 25;
 
-	for (int i = fmod(top_left_point.x, ruler); i < rect.right; i += ruler)
+	for (int i = -fmod(top_left_point.x, smallRuler); i < rect.right; i += smallRuler * scale)
 	{
 		MoveToEx(hMemDc, i, rect.top, NULL);
 		LineTo(hMemDc, i, rect.bottom);
 	}
 
+	SelectObject(hMemDc, lightPen2);
+	for (int i = -fmod(top_left_point.x, bigRuler); i < rect.right; i += bigRuler * scale)
+	{
+		MoveToEx(hMemDc, i, rect.top, NULL);
+		LineTo(hMemDc, i, rect.bottom);
+	}
 
+	SelectObject(hMemDc, blackPen);
+	
 	g_num_mutex.lock();
 	SetTextColor(hMemDc, RGB(0, 0, 255));
 	SetBkMode(hMemDc, TRANSPARENT);
