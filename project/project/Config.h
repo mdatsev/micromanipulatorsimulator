@@ -1,6 +1,6 @@
 #pragma once
 #include <random>
-#define seed 30
+#define seed 420
 static std::mt19937 gen(seed);
 #define gravity_constant 1000
 #define air_friction 0.4
@@ -20,7 +20,7 @@ static std::mt19937 gen(seed);
 #define max_restitution 1
 #define min_mass 1
 #define max_mass 1
-#define min_muscles 2
+#define min_muscles 1
 #define max_muscles 10
 #define min_stiffness 200
 #define max_stiffness 600
